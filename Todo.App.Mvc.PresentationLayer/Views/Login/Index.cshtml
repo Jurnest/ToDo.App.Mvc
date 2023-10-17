@@ -1,0 +1,33 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+<html>
+<head>
+    <title>ToDoApp SignIn</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">UserName</label>
+                        <input type="text" class="form-control" asp-for="UserName" id="username">
+                        <span asp-validation-for="UserName" class="text-warning"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" asp-for="Password" id="password">
+                        <span asp-validation-for="Password" class="text-warning"></span>
+                    </div>
+                    <div class="text-danger">@ViewBag.Danger</div>
+                    <button type="submit" class="btn btn-primary">SignIn</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
