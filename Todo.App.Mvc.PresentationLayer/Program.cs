@@ -14,6 +14,8 @@ builder.Services.AddDbContext<Context>(options => options.UseSqlServer(builder.C
 builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<Context>();
 builder.Services.AddScoped<IToDoListDal, EfToDoListDal>();
 builder.Services.AddScoped<IToDoListService, ToDoListManager>();
+builder.Services.AddScoped<IToDoCategoryDal, EFToDoCategoryDal>();
+builder.Services.AddScoped<IToDoCategoryService, ToDoCategoryManager>();
 
 var app = builder.Build();
 
