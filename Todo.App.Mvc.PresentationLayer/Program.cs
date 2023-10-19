@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Todo.App.Mvc.BusinessLayer.Abstract;
 using Todo.App.Mvc.BusinessLayer.Concrete;
@@ -17,8 +18,8 @@ builder.Services.AddScoped<IToDoListService, ToDoListManager>();
 builder.Services.AddScoped<IToDoCategoryDal, EFToDoCategoryDal>();
 builder.Services.AddScoped<IToDoCategoryService, ToDoCategoryManager>();
 
-var app = builder.Build();
 
+var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
