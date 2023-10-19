@@ -238,7 +238,7 @@ namespace Todo.App.Mvc.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ToDoCategory");
+                    b.ToTable("ToDoCategories");
                 });
 
             modelBuilder.Entity("ToDo.App.Mvc.EntityLayer.Concrete.ToDoList", b =>

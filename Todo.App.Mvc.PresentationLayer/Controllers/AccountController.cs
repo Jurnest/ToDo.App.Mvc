@@ -39,7 +39,7 @@ namespace Todo.App.Mvc.PresentationLayer.Controllers
 
             if (result.Succeeded)
             {
-                return RedirectToAction("Login", "Identity");
+                return RedirectToAction("Login", "Account");
             }
             return View();
         }

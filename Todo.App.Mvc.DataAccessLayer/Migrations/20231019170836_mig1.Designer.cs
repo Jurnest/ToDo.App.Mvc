@@ -12,8 +12,8 @@ using Todo.App.Mvc.DataAccessLayer.Concrete;
 namespace Todo.App.Mvc.DataAccessLayer.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20231017185858_update_ToDoList_table")]
-    partial class update_ToDoList_table
+    [Migration("20231019170836_mig1")]
+    partial class mig1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -223,6 +223,27 @@ namespace Todo.App.Mvc.DataAccessLayer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ToDo.App.Mvc.EntityLayer.Concrete.ToDoCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ToDoCategories");
+                });
+
             modelBuilder.Entity("ToDo.App.Mvc.EntityLayer.Concrete.ToDoList", b =>
                 {
                     b.Property<int>("Id")
@@ -250,11 +271,16 @@ namespace Todo.App.Mvc.DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TodoCategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TodoCategoryId");
 
                     b.ToTable("ToDoLists");
                 });
@@ -308,6 +334,22 @@ namespace Todo.App.Mvc.DataAccessLayer.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ToDo.App.Mvc.EntityLayer.Concrete.ToDoList", b =>
+                {
+                    b.HasOne("ToDo.App.Mvc.EntityLayer.Concrete.ToDoCategory", "ToDoCategories")
+                        .WithMany("ToDoLists")
+                        .HasForeignKey("TodoCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ToDoCategories");
+                });
+
+            modelBuilder.Entity("ToDo.App.Mvc.EntityLayer.Concrete.ToDoCategory", b =>
+                {
+                    b.Navigation("ToDoLists");
                 });
 #pragma warning restore 612, 618
         }

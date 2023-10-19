@@ -1,0 +1,20 @@
+﻿@model SidebarViewsModels
+@{
+    Layout = null;
+}
+@if (ViewBag.CategoryId != 0)
+{
+    <div class="container-fluid bottom-0 position-sticky ">
+        <div class="card bg-primary">
+            <div class="card-body">
+                <form class="d-flex" asp-controller="App" asp-action="CreateToDo" method="post">
+                    <input type="text" value="@ViewBag.CategoryId" class="form-control bg-white" asp-for="toDoListViewModel.TodoCategoryId" hidden="hidden">
+                    <input type="text" asp-for="toDoListViewModel.UserId" value="@ViewBag.UserId" hidden="hidden" />
+                    <input type="text" class="form-control me-2 bg-white" id="inlineFormInput" placeholder="Title" asp-for="toDoListViewModel.Title">
+                    <input type="datetime-local" class="form-control me-2 bg-white" id="inlineFormInputGroup" placeholder="When?" asp-for="toDoListViewModel.PlannedEndDate">
+                    <button type="submit" class="btn btn-light">Add ToDo</button>
+                </form>
+            </div>
+        </div>
+    </div>
+}

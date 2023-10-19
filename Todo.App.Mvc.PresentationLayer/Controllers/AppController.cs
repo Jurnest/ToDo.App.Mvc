@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System.Security.Claims;
 using Todo.App.Mvc.BusinessLayer.Abstract;
+using Todo.App.Mvc.PresentationLayer.Models.ViewModels;
 using ToDo.App.Mvc.EntityLayer.Concrete;
 
 namespace Todo.App.Mvc.PresentationLayer.Controllers
@@ -30,7 +32,7 @@ namespace Todo.App.Mvc.PresentationLayer.Controllers
             if (id != null)
             {
                 var toDoLists = _toDoListService.TGetByUserId(userId);
-                result = toDoLists.ToList().Where(x => x.TodoCategoryId == id);
+                result = toDoLists.ToList().Where(x => x.TodoCategoryId.ToString() == id.ToString());
             }
             else
             {
@@ -39,17 +41,13 @@ namespace Todo.App.Mvc.PresentationLayer.Controllers
 
             var toDoCategories = _toDoCategoryService.TGetByUserId(userId);
             ViewBag.UserId = userId;
-            return View(new Tuple<List<ToDoList>, List<ToDoCategory>>(result.ToList(), toDoCategories));
+            ViewBag.CategoryId = id;
+            var sidebarViewsModels = new SidebarViewsModels();
+            sidebarViewsModels.ToDoLists = result.ToList();
+            sidebarViewsModels.Categories = toDoCategories;
+            return View(sidebarViewsModels);
         }
 
-
-        [HttpGet]
-        public IActionResult AddToDo()
-        {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            ViewBag.UserId = userId;
-            return View();
-        }
 
         [HttpPost]
         public IActionResult AddToDo(ToDoList toDoList)
@@ -115,6 +113,32 @@ namespace Todo.App.Mvc.PresentationLayer.Controllers
             _toDoListService.TDelete(value);
             return RedirectToAction("Index", new { id = value.TodoCategoryId });
 
+        }
+
+        [HttpGet]
+        public IActionResult CreateToDo(int id)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            ViewBag.UserId = userId;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateToDo(SidebarViewsModels model)
+        {
+            var category = _toDoCategoryService.TGetById(model.toDoListViewModel.TodoCategoryId);
+            var toDoListViewModel = new ToDoList()
+            {
+                Title = model.toDoListViewModel.Title,
+                PlannedEndDate = model.toDoListViewModel.PlannedEndDate,
+                UserId = model.toDoListViewModel.UserId,
+            };
+            
+            toDoListViewModel.ToDoCategories = category;
+
+            _toDoListService.TInsert(toDoListViewModel);
+
+            return RedirectToAction("Index", new { id = model.toDoListViewModel.TodoCategoryId });
         }
     }
 }

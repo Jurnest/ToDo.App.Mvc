@@ -17,5 +17,6 @@ namespace Todo.App.Mvc.DataAccessLayer.Concrete
         }
 
         public DbSet<ToDoList> ToDoLists { get; set; }
+        public DbSet<ToDoCategory> ToDoCategories { get; set; }
     }
 }
